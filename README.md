@@ -1,8 +1,7 @@
-<p align="center">
-  <img src="favicon.svg" alt="دفتر — لوغو" width="160">
-</p>
-
 # دفتر — Daftar
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Arabic Notes](https://img.shields.io/badge/Daftar-Arabic%20Notes-8A2BE2)](#)
 
 مفكرة ملاحظات عربية بسيطة تعمل كلها في المتصفح: تكتب، تعدّل، تحذف، وتبحث — وكل شيء
 يُحفظ محلياً على جهازك. لا خادم، ولا حساب، ولا إرسال لأي بيانات.
