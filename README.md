@@ -1,8 +1,6 @@
 # دفتر — Daftar
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Arabic Notes](https://img.shields.io/badge/Daftar-Arabic%20Notes-8A2BE2)](#)
-[![Quick & Easy](https://img.shields.io/badge/Quick%20%26%20Easy-8A2BE2)](#)
+[دفتر](https://github.com/jabar-reda/daftar)
 
 مفكرة ملاحظات عربية بسيطة تعمل كلها في المتصفح: تكتب، تعدّل، تحذف، وتبحث — وكل شيء
 يُحفظ محلياً على جهازك. لا خادم، ولا حساب، ولا إرسال لأي بيانات.
