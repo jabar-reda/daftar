@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دفتر — مفكرة ملاحظات عربية</title>
+<meta name="description" content="دفتر: مفكرة ملاحظات عربية بسيطة تعمل في المتصفح وتحفظ ما تكتبه محلياً، بلا حساب ولا خادم.">
+<meta name="author" content="Jabar Reda">
+<meta name="keywords" content="دفتر, ملاحظات, مفكرة, تطبيق ويب, عربي, offline, notes">
+<meta name="theme-color" content="#e4e2d6">
+<meta name="color-scheme" content="light">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="دفتر">
+<meta property="og:title" content="دفتر — مفكرة ملاحظات عربية">
+<meta property="og:description" content="اكتب، عدّل، وابحث في ملاحظاتك. تعمل في المتصفح وتحفظها محلياً على جهازك.">
+<meta property="og:locale" content="ar_AR">
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="ledger">
+    <header class="masthead">
+      <h1 class="wordmark">دفتر</h1>
+      <div class="search">
+        <input type="text" id="search" placeholder="بحث" aria-label="بحث في الملاحظات">
+      </div>
+    </header>
+
+    <form class="composer" id="composer" autocomplete="off">
+      <input type="text" id="composer-title" placeholder="العنوان" maxlength="80" aria-label="عنوان الملاحظة">
+      <textarea id="composer-body" placeholder="اكتب هنا..." rows="2" aria-label="محتوى الملاحظة"></textarea>
+      <div class="composer-footer">
+        <button type="submit" class="btn-add">أضف</button>
+      </div>
+    </form>
+
+    <section class="entries" id="entries"></section>
+  </main>
+
+  <div class="sr-only" aria-live="polite" id="announcer"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

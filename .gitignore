@@ -1,0 +1,21 @@
+# النظام
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# المحررات
+.vscode/
+.idea/
+*.swp
+
+# الأسرار والبيئة
+.env
+.env.*
+
+# السجلات
+*.log
+npm-debug.log*
+
+# الحزم (المشروع لا يحتاجها، لكنها قد تظهر لاحقاً)
+node_modules/
+__pycache__/
