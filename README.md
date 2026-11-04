@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/Daftar-Arabic%20Notes-8A2BE2" alt="Daftar Arabic Notes" width="220">
+  <img src="favicon.svg" alt="دفتر — لوغو" width="160">
 </p>
 
 # دفتر — Daftar
