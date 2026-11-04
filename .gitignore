@@ -1,21 +1,15 @@
-# النظام
-.DS_Store
+# نظام التشغيل والمحررات
 Thumbs.db
 desktop.ini
-
-# المحررات
-.vscode/
-.idea/
+.DS_Store
 *.swp
+.idea/
+.vscode/
 
-# الأسرار والبيئة
+# بيئة وبيانات محلية
 .env
 .env.*
-
-# السجلات
-*.log
-npm-debug.log*
-
-# الحزم (المشروع لا يحتاجها، لكنها قد تظهر لاحقاً)
 node_modules/
-__pycache__/
+
+# مخرجات مؤقتة
+*.log
