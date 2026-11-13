@@ -1,0 +1,89 @@
+name: بناء APK
+
+# يدوي فقط: زر Run workflow في تبويب Actions
+on:
+  workflow_dispatch:
+    inputs:
+      keystore_password:
+        description: كلمة مرور مفتاح التوقيع — تُستخدم فقط في أول بناء قبل حفظ الأسرار
+        required: false
+        default: ''
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    env:
+      KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE }}
+      KEYSTORE_ALIAS: daftar
+      INPUT_PASSWORD: ${{ inputs.keystore_password }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: تثبيت أدوات البناء
+        working-directory: apk
+        run: npm install
+
+      - name: تجهيز ملفات الموقع
+        run: |
+          mkdir apk/www
+          cp index.html apk/www/
+          cp -r src apk/www/src
+
+      - name: توليد مشروع أندرويد
+        working-directory: apk
+        run: npx cap add android
+
+      - name: مفتاح التوقيع (محفوظ أو جديد)
+        run: |
+          if [ -n "$KEYSTORE_PASSWORD" ]; then
+            echo "استخدام المفتاح المحفوظ في أسرار المستودع"
+            echo "$KEYSTORE_B64" | base64 --decode > daftar.keystore
+          else
+            if [ -z "$INPUT_PASSWORD" ]; then
+              echo "::error::لا يوجد مفتاح محفوظ في الأسرار، ولم تُدخل كلمة مرور لإنشاء مفتاح جديد. نفّذ واحدة من الاثنتين."
+              exit 1
+            fi
+            echo "إنشاء مفتاح توقيع جديد (مرة واحدة فقط)"
+            keytool -genkeypair -v \
+              -keystore daftar.keystore \
+              -alias daftar \
+              -keyalg RSA -keysize 2048 -validity 10000 \
+              -storepass "$INPUT_PASSWORD" -keypass "$INPUT_PASSWORD" \
+              -dname "CN=Daftar, OU=Daftar, O=Jabar Reda, C=SA"
+            echo "GENERATED=true" >> "$GITHUB_ENV"
+          fi
+
+      - name: ضبط توقيع الإصدار ورقمه
+        working-directory: apk
+        env:
+          VERSION_CODE: ${{ github.run_number }}
+          VERSION_NAME: 1.${{ github.run_number }}
+        run: python3 sign-android.py
+
+      - name: بناء APK موقّع
+        run: chmod +x apk/android/gradlew && cd apk/android && ./gradlew assembleRelease
+        env:
+          KEYSTORE_FILE: ${{ github.workspace }}/daftar.keystore
+
+      - name: رفع APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: daftar-apk
+          path: apk/android/app/build/outputs/apk/release/app-release.apk
+
+      - name: رفع مفتاح التوقيع الجديد لتحفظه في الأسرار
+        if: env.GENERATED == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: daftar-keystore
+          path: daftar.keystore

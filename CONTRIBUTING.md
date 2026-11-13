@@ -38,6 +38,7 @@ daftar/
 │  ├─ js/app.js          كل المنطق داخل IIFE واحد بـ 'use strict'
 │  ├─ fonts/             الخطوط الثمانية (Amiri وAref Ruqaa) بـ @font-face محلي
 │  └─ icons/             favicon.svg و favicon.ico
+├─ apk/                  أدوات بناء APK (تعمل في Actions فقط)
 └─ .github/SECURITY.md   سياسة الأمان والإبلاغ عن الثغرات
 ```
 
@@ -53,8 +54,8 @@ daftar/
 - **البحث مؤجَّل 150ms**؛ لا تُلغِ التأجيل وإلا أُعيد الرسم مع كل حرف.
 - **الحذف ينتظر 200ms** لتنتهي حركة `is-leaving`؛ لا تحذف من المصفوفة قبل ذلك. الاستثناء
   المقصود الوحيد: بلا انتظار عند تفعيل `prefers-reduced-motion`.
-- **لا تُدخل مكتبات ولا CDN.** الخطوط مستضافة محلياً في `src/fonts/` عبر `@font-face`؛
-  لا يُجلب أي خط من الشبكة.
+- **لا تُدخل مكتبات ولا CDN** في كود التطبيق؛ حزم بناء APK تعيش في `apk/` وتعمل في Actions
+  فقط. الخطوط مستضافة محلياً في `src/fonts/` عبر `@font-face`؛ لا يُجلب أي خط من الشبكة.
 - **احترم `dir="rtl"`** واستخدم الخصائص المنطقية (`inset-inline-start`, `padding-inline-end`)
   بدل `left`/`right`.
 

@@ -11,5 +11,10 @@ desktop.ini
 .env.*
 node_modules/
 
+# مخرجات البناء في CI — لا تُلتزم أبداً
+www/
+android/
+*.keystore
+
 # مخرجات مؤقتة
 *.log
