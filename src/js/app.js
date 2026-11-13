@@ -20,6 +20,8 @@
   }
 
   const STORAGE_KEY = 'daftar_v1';
+  /* مفتاح منفصل عن الملاحظات: عَلَم رؤية نافذة الترحيب */
+  const POPUP_SEEN_KEY = 'daftar_seen_v1';
   const SEARCH_DEBOUNCE_MS = 150;
   /* يجب أن يطابق مدة حركة is-leaving في styles.css وإلا تُحذف الملاحظة قبل أن تختفي */
   const DELETE_ANIMATION_MS = 200;
@@ -36,6 +38,7 @@
   const confirmDialog = document.getElementById('confirm-dialog');
   const confirmDeleteBtn = document.getElementById('confirm-delete');
   const confirmCancelBtn = document.getElementById('confirm-cancel');
+  const popupEl = document.getElementById('popup');
 
   let notes = [];
   let editingId = null;
@@ -44,10 +47,11 @@
 
   const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 
+  // innerHTML لا يهرّب علامات الاقتباس، وهي خطرة داخل value="..." في نموذج التعديل
   const escapeHtml = (s) => {
     const d = document.createElement('div');
     d.textContent = s ?? '';
-    return d.innerHTML;
+    return d.innerHTML.replace(/"/g, '&quot;');
   };
 
   // تفريغ النص ثم ملؤه يعيد تشغيل إعلان aria-live للقارئات الشاشية
@@ -247,6 +251,28 @@
   confirmCancelBtn.addEventListener('click', () => {
     pendingDeleteId = null;
     confirmDialog.close();
+  });
+
+  // نافذة الترحيب: أول زيارة فقط، وأي إغلاق (زر أو Esc) يسجلها حتى لا تعود
+  const popupSeen = () => {
+    try {
+      return localStorage.getItem(POPUP_SEEN_KEY) === '1';
+    } catch (e) {
+      // تخزين مُعطَّل: لا نُزعج المستخدم بنافذة تكرر في كل تحميل
+      return true;
+    }
+  };
+  const markPopupSeen = () => {
+    try {
+      localStorage.setItem(POPUP_SEEN_KEY, '1');
+    } catch (e) {}
+  };
+  popupEl.addEventListener('close', markPopupSeen);
+  if (!popupSeen()) {
+    popupEl.showModal();
+  }
+  popupEl.querySelectorAll('.js-dismiss').forEach((btn) => {
+    btn.addEventListener('click', () => popupEl.close());
   });
 
   composer.addEventListener('submit', (e) => {

@@ -359,6 +359,15 @@ body::before {
 .btn-text:hover { opacity: 0.7; }
 
 /* حوار تأكيد الحذف */
+/* توسيط الحوارين: إعادة الضبط العامة تلغي margin auto الأصلي لعناصر dialog */
+.confirm,
+.popup {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  height: fit-content;
+}
+
 .confirm {
   border: 1px solid var(--rule);
   background: var(--bg-lift);
@@ -383,6 +392,121 @@ body::before {
   display: flex;
   gap: 1rem;
   justify-content: flex-end;
+}
+
+/* نافذة الترحيب: تفتحها app.js في أول زيارة، وتُسجَّل رؤيتها عند أي إغلاق */
+.popup {
+  border: 1px solid var(--rule);
+  background: var(--bg-lift);
+  color: var(--ink);
+  font-family: var(--font-body);
+  padding: 1.75rem 1.75rem 1.25rem;
+  width: min(85vw, 360px);
+  animation: rise 0.25s ease-out;
+}
+
+.popup::backdrop { background: rgba(26, 27, 22, 0.4); }
+
+.popup-wordmark {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.popup-title {
+  font-weight: 700;
+  font-size: 1.15rem;
+  margin-top: 1rem;
+}
+
+.popup-text {
+  color: var(--ink-soft);
+  margin-top: 0.35rem;
+  font-size: 1rem;
+}
+
+/* قيود: ثلاث نقاط بفواصل قصيرة كخطوط الدفتر */
+.popup-points {
+  list-style: none;
+  margin-top: 1rem;
+}
+
+.popup-points li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--rule);
+}
+
+.popup-points li:last-child { border-bottom: none; }
+
+.popup-points li::before {
+  content: '';
+  flex-shrink: 0;
+  width: 0.4rem;
+  height: 1px;
+  background: var(--accent);
+  transform: translateY(-0.3rem);
+}
+
+.popup-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--rule);
+}
+
+.btn-start {
+  background: transparent;
+  border: none;
+  padding: 0.35rem 0;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  cursor: pointer;
+  border-bottom: 1px solid var(--accent);
+}
+
+.btn-quiet {
+  background: transparent;
+  border: none;
+  padding: 0.35rem 0;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  cursor: pointer;
+  border-bottom: 1px solid var(--ink-faint);
+}
+
+.btn-start:hover, .btn-quiet:hover { opacity: 0.7; }
+
+/* تذييل المؤلف: سطر باهت صغير، والروابط بلا زخرفة حتى لا تنافس زر البدء */
+.popup-footer {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+}
+
+.popup-link {
+  color: var(--ink-faint);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.popup-link:hover {
+  color: var(--ink-soft);
+  border-bottom-color: var(--ink-faint);
 }
 
 /* الحالة الفارغة */
