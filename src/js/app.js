@@ -1,7 +1,32 @@
 (function () {
   'use strict';
 
+  const FONT_REVEAL_TIMEOUT_MS = 2000;
+
+  // إخفاء المحتوى حتى جهوزية الخطوط لتلطيف وميض التبديل، مع مهلة أمان إن تعطلت الشبكة
+  document.documentElement.classList.add('is-font-loading');
+  const revealPage = () => {
+    document.documentElement.classList.remove('is-font-loading');
+    document.documentElement.classList.add('is-font-ready');
+  };
+  const revealTimer = setTimeout(revealPage, FONT_REVEAL_TIMEOUT_MS);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      clearTimeout(revealTimer);
+      revealPage();
+    });
+  } else {
+    revealPage();
+  }
+
   const STORAGE_KEY = 'daftar_v1';
+  const SEARCH_DEBOUNCE_MS = 150;
+  /* يجب أن يطابق مدة حركة is-leaving في styles.css وإلا تُحذف الملاحظة قبل أن تختفي */
+  const DELETE_ANIMATION_MS = 200;
+  const ANNOUNCE_CLEAR_MS = 60;
+  const HOUR_MS = 3600000;
+  const DAY_MS = 86400000;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const entriesEl = document.getElementById('entries');
   const composer = document.getElementById('composer');
   const composerTitle = document.getElementById('composer-title');
@@ -21,9 +46,10 @@
     return d.innerHTML;
   };
 
+  // تفريغ النص ثم ملؤه يعيد تشغيل إعلان aria-live للقارئات الشاشية
   const announce = (msg) => {
     announcer.textContent = '';
-    setTimeout(() => { announcer.textContent = msg; }, 60);
+    setTimeout(() => { announcer.textContent = msg; }, ANNOUNCE_CLEAR_MS);
   };
 
   const formatDate = (iso) => {
@@ -38,27 +64,43 @@
   };
 
   const save = () => {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(notes)); } catch (e) {}
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+    } catch (e) {
+      announce('تعذّر الحفظ؛ قد يكون التخزين ممتلئاً أو مُعطَّلاً');
+    }
+  };
+
+  // معرفات uid() حرف ورمز فقط ([a-z0-9])، وهذا يضمن سلامتها داخل القوالب ومحددات CSS
+  const isValidNote = (n) => {
+    if (!n || typeof n !== 'object') return false;
+    if (typeof n.id !== 'string' || !/^[a-z0-9]+$/.test(n.id)) return false;
+    if (typeof n.title !== 'string' || typeof n.body !== 'string') return false;
+    if (!n.title && !n.body) return false;
+    return !Number.isNaN(new Date(n.createdAt).getTime());
   };
 
   const load = () => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
-        notes = JSON.parse(raw);
+        const parsed = JSON.parse(raw);
+        // تُهمَل المدخلات التالفة بدل أن يتعطل التطبيق كله، ولا تُكتب فوقها حفاظاً على بقيتها
+        notes = Array.isArray(parsed) ? parsed.filter(isValidNote) : [];
       } else {
+        // ملاحظتا ترحيب عند أول تشغيل فقط
         notes = [
           {
             id: uid(),
             title: 'من كتاب',
             body: 'الكتابة هي القراءة مرتين: مرة للفهم، ومرة للاحتفاظ بما يستحق الاحتفاظ.',
-            createdAt: new Date(Date.now() - 3600000).toISOString()
+            createdAt: new Date(Date.now() - HOUR_MS).toISOString()
           },
           {
             id: uid(),
             title: '',
             body: 'فكرة قبل النوم: الأشياء الصغيرة التي لا نلاحظها هي التي تشكّل يومنا كله.',
-            createdAt: new Date(Date.now() - 86400000).toISOString()
+            createdAt: new Date(Date.now() - DAY_MS).toISOString()
           }
         ];
         save();
@@ -124,6 +166,7 @@
 
     const sorted = [...list].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     entriesEl.innerHTML = sorted.map(renderEntry).join('');
+    // innerHTML يمحو مستمعي الأحداث القديمة، لذا تُربط الأزرار من جديد بعد كل رسم
     bindEntryEvents();
   };
 
@@ -146,12 +189,14 @@
         delBtn.addEventListener('click', () => {
           if (!confirm('حذف هذه الملاحظة؟')) return;
           el.classList.add('is-leaving');
+          // مع تقليل الحركة تنتهي الحركة فوراً، فلا داعي للانتظار
+          const waitMs = prefersReducedMotion ? 0 : DELETE_ANIMATION_MS;
           setTimeout(() => {
             notes = notes.filter(n => n.id !== id);
             save();
             render();
             announce('حُذفت الملاحظة');
-          }, 200);
+          }, waitMs);
         });
       }
 
@@ -220,6 +265,7 @@
     announce('أُضيفت الملاحظة');
   });
 
+  // إضافة الملاحظة بـ Ctrl+Enter (أو ⌘+Enter على ماك) من أي حقل في النموذج
   [composerTitle, composerBody].forEach(el => {
     el.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
@@ -236,7 +282,7 @@
       searchQuery = e.target.value;
       editingId = null;
       render();
-    }, 150);
+    }, SEARCH_DEBOUNCE_MS);
   });
 
   load();
