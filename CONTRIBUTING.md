@@ -37,7 +37,7 @@ daftar/
 │  ├─ css/styles.css   كل التصميم؛ التوكنز في :root أعلى الملف
 │  ├─ js/app.js        كل المنطق داخل IIFE واحد بـ 'use strict'
 │  └─ icons/           favicon.svg و favicon.ico
-└─ docs/               توثيق إضافي (إن وُجد)
+└─ .github/SECURITY.md سياسة الأمان والإبلاغ عن الثغرات
 ```
 
 ## قواعد لا تُخالَف
