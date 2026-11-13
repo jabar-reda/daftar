@@ -43,6 +43,10 @@ jobs:
         working-directory: apk
         run: npx cap add android
 
+      - name: توليد أيقونات أندرويد من الهوية
+        working-directory: apk
+        run: npx --yes @capacitor/assets generate --android --iconBackgroundColor '#6b2525' --iconBackgroundColorDark '#6b2525' --splashBackgroundColor '#e1e0d9' --splashBackgroundColorDark '#e1e0d9'
+
       - name: مفتاح التوقيع (محفوظ أو جديد)
         run: |
           if [ -n "$KEYSTORE_PASSWORD" ]; then

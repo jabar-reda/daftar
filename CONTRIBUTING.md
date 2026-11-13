@@ -38,7 +38,7 @@ daftar/
 │  ├─ js/app.js          كل المنطق داخل IIFE واحد بـ 'use strict'
 │  ├─ fonts/             الخطوط الثمانية (Amiri وAref Ruqaa) بـ @font-face محلي
 │  └─ icons/             favicon.svg و favicon.ico
-├─ apk/                  أدوات بناء APK (تعمل في Actions فقط)
+├─ apk/                  أدوات بناء APK (تعمل في Actions فقط) وأيقونة الهوية
 └─ .github/SECURITY.md   سياسة الأمان والإبلاغ عن الثغرات
 ```
 

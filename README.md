@@ -83,7 +83,7 @@ daftar/
 │  │  └─ app.js      المنطق كاملاً في ملف واحد
 │  ├─ fonts/         ملفات الخطوط الثمانية (Amiri وAref Ruqaa)
 │  └─ icons/         أيقونة الموقع (SVG وICO)
-├─ apk/           أدوات بناء APK في GitHub Actions
+├─ apk/           أدوات بناء APK في GitHub Actions وأيقونة الهوية
 ├─ README.md      هذا الملف
 ├─ CONTRIBUTING.md كيف تساهم
 ├─ AGENTS.md      قواعد العمل على المشروع للوكلاء والمحررين

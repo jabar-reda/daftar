@@ -19,8 +19,9 @@
 - `index.html` الهيكل فقط: لا أنماط مضمّنة ولا `onclick` ولا سكربتات مضمّنة.
 - `src/css/styles.css` كل التصميم؛ التوكنز في `:root` أعلى الملف، وهي المصدر الوحيد للألوان.
 - `src/js/app.js` كل المنطق داخل IIFE واحد بـ `'use strict'`، بلا متغيّرات عامة.
-- `apk/` أدوات بناء APK للسحابة فقط (`package.json` و`capacitor.config.json` و`sign-android.py`)؛
-  لا تُشغَّل محلياً ولا يدخل منها شيء إلى كود التطبيق.
+- `apk/` أدوات بناء APK للسحابة فقط (`package.json` و`capacitor.config.json` و`sign-android.py`
+  و`make-icons.py`) و`assets/` لأيقونة الهوية وشاشة البداية؛ لا تُشغَّل محلياً ولا يدخل منها
+  شيء إلى كود التطبيق.
 - ترتيب التحميل مهم: `src/css/styles.css` في `<head>` و`src/js/app.js` في نهاية `<body>`، لأن السكربت
   يبحث عن عناصر الصفحة فور تنفيذه.
 

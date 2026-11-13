@@ -10,6 +10,7 @@ desktop.ini
 .env
 .env.*
 node_modules/
+__pycache__/
 
 # مخرجات البناء في CI — لا تُلتزم أبداً
 www/

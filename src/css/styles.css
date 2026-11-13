@@ -79,7 +79,10 @@
   --max-width: 640px;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* لمس الهاتف: بلا تظليل النظام الأزرق فوق الأزرار */
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+button:active { opacity: 0.55; }
 
 body {
   font-family: var(--font-body);
