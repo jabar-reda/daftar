@@ -65,12 +65,13 @@
 }
 
 :root {
-  --bg: #e4e2d6;
-  --bg-lift: #ebe9de;
+  /* ورق رمادي حجري بدل الكريمي الدافئ لتفريق الهوية عن قوالب الذكاء الاصطناعي الشائعة */
+  --bg: #e1e0d9;
+  --bg-lift: #e8e7e0;
   --ink: #1a1b16;
   --ink-soft: #52534a;
   --ink-faint: #8a8b80;
-  --rule: #cac9bc;
+  --rule: #c6c5be;
   --accent: #6b2525;
   --accent-wash: #ede0da;
   --font-display: 'Aref Ruqaa', 'Amiri', serif;
@@ -352,9 +353,37 @@ body::before {
   transition: opacity 0.2s;
 }
 
-.btn-text.save { color: var(--accent); border-bottom: 1px solid var(--accent); }
+.btn-text.save,
+.btn-text.danger { color: var(--accent); border-bottom: 1px solid var(--accent); }
 .btn-text.cancel { color: var(--ink-faint); border-bottom: 1px solid var(--ink-faint); }
 .btn-text:hover { opacity: 0.7; }
+
+/* حوار تأكيد الحذف */
+.confirm {
+  border: 1px solid var(--rule);
+  background: var(--bg-lift);
+  color: var(--ink);
+  font-family: var(--font-body);
+  padding: 1.25rem 1.5rem;
+  width: min(85vw, 320px);
+}
+
+.confirm::backdrop {
+  background: rgba(26, 27, 22, 0.4);
+}
+
+.confirm[open] { animation: rise 0.25s ease-out; }
+
+.confirm-text {
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
 
 /* الحالة الفارغة */
 .empty {

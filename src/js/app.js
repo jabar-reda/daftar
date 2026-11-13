@@ -33,10 +33,14 @@
   const composerBody = document.getElementById('composer-body');
   const searchInput = document.getElementById('search');
   const announcer = document.getElementById('announcer');
+  const confirmDialog = document.getElementById('confirm-dialog');
+  const confirmDeleteBtn = document.getElementById('confirm-delete');
+  const confirmCancelBtn = document.getElementById('confirm-cancel');
 
   let notes = [];
   let editingId = null;
   let searchQuery = '';
+  let pendingDeleteId = null;
 
   const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 
@@ -187,16 +191,9 @@
       const delBtn = el.querySelector('.act-delete');
       if (delBtn) {
         delBtn.addEventListener('click', () => {
-          if (!confirm('حذف هذه الملاحظة؟')) return;
-          el.classList.add('is-leaving');
-          // مع تقليل الحركة تنتهي الحركة فوراً، فلا داعي للانتظار
-          const waitMs = prefersReducedMotion ? 0 : DELETE_ANIMATION_MS;
-          setTimeout(() => {
-            notes = notes.filter(n => n.id !== id);
-            save();
-            render();
-            announce('حُذفت الملاحظة');
-          }, waitMs);
+          pendingDeleteId = id;
+          confirmDialog.showModal();
+          confirmDeleteBtn.focus();
         });
       }
 
@@ -228,6 +225,29 @@
       }
     });
   };
+
+  // حوار تأكيد الحذف: زر الحذف في القيد يفتحه، وزر «حذف» فيه يكمل العملية
+  confirmDeleteBtn.addEventListener('click', () => {
+    const id = pendingDeleteId;
+    pendingDeleteId = null;
+    confirmDialog.close();
+    const entryEl = entriesEl.querySelector(`.entry[data-id="${id}"]`);
+    if (!entryEl) return;
+    entryEl.classList.add('is-leaving');
+    // مع تقليل الحركة تنتهي الحركة فوراً، فلا داعي للانتظار
+    const waitMs = prefersReducedMotion ? 0 : DELETE_ANIMATION_MS;
+    setTimeout(() => {
+      notes = notes.filter(n => n.id !== id);
+      save();
+      render();
+      announce('حُذفت الملاحظة');
+    }, waitMs);
+  });
+
+  confirmCancelBtn.addEventListener('click', () => {
+    pendingDeleteId = null;
+    confirmDialog.close();
+  });
 
   composer.addEventListener('submit', (e) => {
     e.preventDefault();

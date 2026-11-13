@@ -7,7 +7,7 @@
 <meta name="description" content="دفتر: مفكرة ملاحظات عربية بسيطة تعمل في المتصفح وتحفظ ما تكتبه محلياً، بلا حساب ولا خادم.">
 <meta name="author" content="Jabar Reda">
 <meta name="keywords" content="دفتر, ملاحظات, مفكرة, تطبيق ويب, عربي, offline, notes">
-<meta name="theme-color" content="#e4e2d6">
+<meta name="theme-color" content="#e1e0d9">
 <meta name="color-scheme" content="light">
 
 <meta property="og:type" content="website">
@@ -39,6 +39,14 @@
 
     <section class="entries" id="entries"></section>
   </main>
+
+  <dialog class="confirm" id="confirm-dialog">
+    <p class="confirm-text">حذف هذه الملاحظة؟</p>
+    <div class="confirm-actions">
+      <button type="button" class="btn-text cancel" id="confirm-cancel">إلغاء</button>
+      <button type="button" class="btn-text danger" id="confirm-delete">حذف</button>
+    </div>
+  </dialog>
 
   <div class="sr-only" aria-live="polite" id="announcer"></div>
 
