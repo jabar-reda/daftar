@@ -61,6 +61,7 @@ jobs:
               -storepass "$INPUT_PASSWORD" -keypass "$INPUT_PASSWORD" \
               -dname "CN=Daftar, OU=Daftar, O=Jabar Reda, C=SA"
             echo "GENERATED=true" >> "$GITHUB_ENV"
+            echo "KEYSTORE_PASSWORD=$INPUT_PASSWORD" >> "$GITHUB_ENV"
           fi
 
       - name: ضبط توقيع الإصدار ورقمه
