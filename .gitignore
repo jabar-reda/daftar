@@ -10,7 +10,6 @@ desktop.ini
 .env
 .env.*
 node_modules/
-.opencode/
 
 # مخرجات مؤقتة
 *.log
