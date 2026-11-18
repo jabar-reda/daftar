@@ -88,14 +88,14 @@ def write_png(path, rows):
 def paper_layers(x0, y0, x1, y1, sheet, lines):
     """ورقة بأركان دائرية وخطوط كتابة داخلها."""
     r = 48
-    layers = [
-        (sheet, lambda x, y: in_round_rect(x, y, x0, y0, x1, y1, r)),
-    ]
+    # الخطوط أولاً: pixel_color تُرجع أول طبقة تضم النقطة، فما يأتي أولاً يعلو
+    layers = []
     for (lx0, ly0, lx1, ly1) in lines:
         layers.append((
             BURGUNDY if sheet is PAPER else PAPER,
             lambda x, y, a=lx0, b=ly0, c=lx1, d=ly1: in_round_rect(x, y, a, b, c, d, 8),
         ))
+    layers.append((sheet, lambda x, y: in_round_rect(x, y, x0, y0, x1, y1, r)))
     return layers
 
 
