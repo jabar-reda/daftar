@@ -53,23 +53,28 @@ jobs:
 
       - name: مفتاح التوقيع (محفوظ أو جديد)
         run: |
-          if [ -n "$KEYSTORE_PASSWORD" ]; then
+          if [ -n "$KEYSTORE_PASSWORD" ] && [ -n "$KEYSTORE_B64" ]; then
             echo "استخدام المفتاح المحفوظ في أسرار المستودع"
             echo "$KEYSTORE_B64" | base64 --decode > daftar.keystore
-          else
-            if [ -z "$INPUT_PASSWORD" ]; then
-              echo "::error::لا يوجد مفتاح محفوظ في الأسرار، ولم تُدخل كلمة مرور لإنشاء مفتاح جديد. نفّذ واحدة من الاثنتين."
-              exit 1
+          elif [ -n "$KEYSTORE_PASSWORD" ] || [ -n "$INPUT_PASSWORD" ]; then
+            # أولوية لكلمة المرور من السر (أكثر أماناً) ثم لمدخل التشغيل اليدوي
+            if [ -n "$KEYSTORE_PASSWORD" ]; then
+              NEW_PASS="$KEYSTORE_PASSWORD"
+            else
+              NEW_PASS="$INPUT_PASSWORD"
+              echo "KEYSTORE_PASSWORD=$INPUT_PASSWORD" >> "$GITHUB_ENV"
             fi
             echo "إنشاء مفتاح توقيع جديد (مرة واحدة فقط)"
             keytool -genkeypair -v \
               -keystore daftar.keystore \
               -alias daftar \
               -keyalg RSA -keysize 2048 -validity 10000 \
-              -storepass "$INPUT_PASSWORD" -keypass "$INPUT_PASSWORD" \
+              -storepass "$NEW_PASS" -keypass "$NEW_PASS" \
               -dname "CN=Daftar, OU=Daftar, O=Jabar Reda, C=SA"
             echo "GENERATED=true" >> "$GITHUB_ENV"
-            echo "KEYSTORE_PASSWORD=$INPUT_PASSWORD" >> "$GITHUB_ENV"
+          else
+            echo "::error::لا يوجد مفتاح محفوظ في الأسرار، ولم تُدخل كلمة مرور لإنشاء مفتاح جديد. نفّذ واحدة من الاثنتين."
+            exit 1
           fi
 
       - name: ضبط توقيع الإصدار ورقمه
