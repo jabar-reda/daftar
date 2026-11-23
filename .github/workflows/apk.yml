@@ -89,11 +89,16 @@ jobs:
         env:
           KEYSTORE_FILE: ${{ github.workspace }}/daftar.keystore
 
+      - name: إعادة تسمية APK
+        env:
+          VERSION_NAME: ${{ inputs.version_name }}
+        run: mv apk/android/app/build/outputs/apk/release/app-release.apk "apk/android/app/build/outputs/apk/release/daftar-v${VERSION_NAME}.apk"
+
       - name: رفع APK
         uses: actions/upload-artifact@v4
         with:
           name: daftar-apk
-          path: apk/android/app/build/outputs/apk/release/app-release.apk
+          path: apk/android/app/build/outputs/apk/release/daftar-v${{ inputs.version_name }}.apk
 
       - name: رفع مفتاح التوقيع الجديد لتحفظه في الأسرار
         if: env.GENERATED == 'true'
