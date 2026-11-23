@@ -564,6 +564,36 @@ body::before {
   color: var(--bg-lift);
 }
 
+/* تذييل الصفحة: إصدار بسيط ورابط GitHub بهوية هادئة */
+.site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  color: var(--ink-faint);
+  font-size: 0.85rem;
+}
+
+.site-version {
+  letter-spacing: 0.02em;
+}
+
+.site-github {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-faint);
+  text-decoration: none;
+  transition: color 0.2s, opacity 0.2s;
+}
+
+.site-github:hover {
+  color: var(--accent);
+}
+
 .sr-only {
   position: absolute;
   width: 1px; height: 1px;
