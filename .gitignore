@@ -6,16 +6,20 @@ desktop.ini
 .idea/
 .vscode/
 
-# بيئة وبيانات محلية
+# بيئة وبيانات محلية حساسة
 .env
 .env.*
-node_modules/
-__pycache__/
-
-# مخرجات البناء في CI — لا تُلتزم أبداً
-www/
-android/
 *.keystore
 
-# مخرجات مؤقتة
+# اعتماديات ومخرجات محلية
+node_modules/
+__pycache__/
+*.pyc
 *.log
+
+# مخرجات بناء APK (تُولّد في CI أو محلياً عند التجربة)
+www/
+android/
+apk/www/
+apk/android/
+apk/node_modules/

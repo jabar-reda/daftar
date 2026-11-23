@@ -219,12 +219,16 @@
           }
           editingId = null;
           render();
+          const savedEditBtn = entriesEl.querySelector(`.entry[data-id="${id}"] .act-edit`);
+          if (savedEditBtn) savedEditBtn.focus();
           announce('حُفظت التعديلات');
         });
 
         form.querySelector('.cancel').addEventListener('click', () => {
           editingId = null;
           render();
+          const restoredEditBtn = entriesEl.querySelector(`.entry[data-id="${id}"] .act-edit`);
+          if (restoredEditBtn) restoredEditBtn.focus();
         });
       }
     });
@@ -233,7 +237,6 @@
   // حوار تأكيد الحذف: زر الحذف في القيد يفتحه، وزر «حذف» فيه يكمل العملية
   confirmDeleteBtn.addEventListener('click', () => {
     const id = pendingDeleteId;
-    pendingDeleteId = null;
     confirmDialog.close();
     const entryEl = entriesEl.querySelector(`.entry[data-id="${id}"]`);
     if (!entryEl) return;
@@ -241,16 +244,30 @@
     // مع تقليل الحركة تنتهي الحركة فوراً، فلا داعي للانتظار
     const waitMs = prefersReducedMotion ? 0 : DELETE_ANIMATION_MS;
     setTimeout(() => {
+      const sorted = [...visibleNotes()].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      const removedIdx = sorted.findIndex(n => n.id === id);
+      const nextFocusId = sorted[removedIdx + 1]?.id || sorted[removedIdx - 1]?.id || null;
+
       notes = notes.filter(n => n.id !== id);
       save();
       render();
+      const nextFocusBtn = nextFocusId ? entriesEl.querySelector(`.entry[data-id="${nextFocusId}"] .act-edit`) : null;
+      if (nextFocusBtn) {
+        nextFocusBtn.focus();
+      } else {
+        composerTitle.focus();
+      }
       announce('حُذفت الملاحظة');
     }, waitMs);
   });
 
   confirmCancelBtn.addEventListener('click', () => {
-    pendingDeleteId = null;
     confirmDialog.close();
+  });
+
+  // تنظيف الحالة عند أي إغلاق (زر إلغاء أو Esc) حتى لا يبقى معرّف حذف قديم
+  confirmDialog.addEventListener('close', () => {
+    pendingDeleteId = null;
   });
 
   // نافذة الترحيب: أول زيارة فقط، وأي إغلاق (زر أو Esc) يسجلها حتى لا تعود

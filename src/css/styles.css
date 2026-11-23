@@ -558,6 +558,12 @@ body::before {
   outline-offset: 3px;
 }
 
+/* لون تحديد النص من هوية دفتر بدل الأزرق الافتراضي */
+::selection {
+  background: var(--accent);
+  color: var(--bg-lift);
+}
+
 .sr-only {
   position: absolute;
   width: 1px; height: 1px;

@@ -38,7 +38,7 @@ src, n_code = re.subn(r"versionCode \d+", "versionCode " + version_code, src, co
 src, n_name = re.subn(r'versionName "[^"]*"', 'versionName "' + version_name + '"', src, count=1)
 
 if not all([n_release, n_block, n_code, n_name]):
-    sys.exit("قالب build.gradle المولّد تغيّر؛ حدّث ci/sign-android.py ليطابقه")
+    sys.exit("قالب build.gradle المولّد تغيّر؛ حدّث apk/sign-android.py ليطابقه")
 
 open(PATH, "w", encoding="utf-8").write(src)
 print("ضُبط التوقيع والإصدار:", version_code, version_name)

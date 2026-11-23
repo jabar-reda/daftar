@@ -1,6 +1,6 @@
 {
   "name": "daftar",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "أدوات بناء APK لتطبيق دفتر في GitHub Actions فقط — لا علاقة لها بتشغيل الموقع",
   "dependencies": {
